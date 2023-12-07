@@ -1,0 +1,14 @@
+.custom-scroll {
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(178, 178, 212);
+    border-radius: 0.25rem;
+  }
+}
