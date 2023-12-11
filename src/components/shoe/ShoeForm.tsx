@@ -11,12 +11,13 @@ import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import './index.scss'
 import { v4 as uuidv4 } from 'uuid';
-import { Image, SizeWithPrice, sizeSelectedValue } from './helper';
+import { FormValue, Image, SizeWithPrice, sizeSelectedValue } from './helper';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
+
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -36,6 +37,14 @@ export default function ShoeForm({ }: Props) {
     const [imageList, setImageList] = useState<Image[]>([])
     const [sizes, setSizes] = React.useState<string[]>([]);
     const [sizeWithPriceList, setSizeWithPriceList] = useState<SizeWithPrice[]>([])
+    const [formValue, setFormValue] = useState<FormValue>({
+        productName: '',
+        brand: 'Nike',
+        description: '',
+        imageList: [],
+        releaseDate: null,
+        sizeWithPrice: []
+    })
 
     const handleURLImage = (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
         const { value } = event.target;
@@ -50,9 +59,9 @@ export default function ShoeForm({ }: Props) {
         })
         setImageList(response)
     }
-    const handleChange = (event: SelectChangeEvent<typeof sizes>) => {
+    const handleChangeSelectMultiple = (event: SelectChangeEvent<typeof sizes>) => {
         const {
-            target: { value },
+            target: { value, name },
         } = event;
         setSizes(
             // On autofill we get a stringified value.
@@ -66,96 +75,162 @@ export default function ShoeForm({ }: Props) {
                 }
             })
             setSizeWithPriceList(sizeWithPrice)
+            setFormValue({
+                ...formValue,
+                [name]: sizeWithPrice
+            })
         }
     };
 
+    const handleChangeSelect = (event: SelectChangeEvent) => {
+        const { value, name } = event.target
+        setFormValue({
+            ...formValue,
+            [name]: value as string
+        });
 
-    useEffect(() => {
-        console.log(sizes)
-    }, [sizes])
+    }
+    const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { value, name } = event.target;
+        setFormValue({
+            ...formValue,
+            [name]: value
+        })
+    }
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        console.log(formValue)
+    }
+    console.log(formValue)
     return (
-        <div className='max-w-[80rem] mx-auto flex flex-col h-screen custom-scroll gap-5 pr-10'>
-
-            <h2 className='text-red-400 text-center'>Create New Shoe</h2>
-            <TextField required id="outlined-basic" label="Name Product" variant="outlined" fullWidth />
-            <div className='flex gap-2'>
-                <DatePicker
-                    label="Controlled picker"
-                    className='w-full'
-                // value={value}
-                // onChange={(newValue) => setValue(newValue)}
-                />
+        <div className='bg-image w-full'>
+            <form className='max-w-[80rem] mx-auto flex flex-col h-screen custom-scroll gap-5 pr-10 bg-white py-10' onSubmit={handleSubmit}>
+                <h2 className='text-red-400 text-center'>Create New Shoe</h2>
+                <TextField required id="outlined-basic" name='productName' value={formValue.productName} label="Name Product" variant="outlined" fullWidth onChange={handleChangeInput} />
+                <div className='flex gap-2'>
+                    <DatePicker
+                        slotProps={{
+                            textField: {
+                                required: true,
+                            },
+                        }}
+                        label="Release Date"
+                        className='w-full'
+                        value={formValue.releaseDate}
+                        onChange={(newValue) => setFormValue({
+                            ...formValue,
+                            releaseDate: newValue
+                        })}
+                    />
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Brand</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={formValue.brand}
+                            label="Brand"
+                            name="brand"
+                            onChange={handleChangeSelect}
+                        >
+                            <MenuItem value={`Nike`}>Nike</MenuItem>
+                            <MenuItem value={`Air Jordan`}>Air Jordan</MenuItem>
+                            <MenuItem value={`Yeezy`}>Yeezy</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
+                <BaseTextareaAutosize name='description' className='border border-solid border-gray-200 text-[1.188rem] py-3 px-2 min-h-[200px] ' required aria-label="minimum height" placeholder="Enter Description" onChange={handleChangeInput} />
                 <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Brand</InputLabel>
+                    <InputLabel id="demo-multiple-checkbox-label">Sizes</InputLabel>
                     <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={10}
-                        label="Brand"
-                    // onChange={handleChange}
+                        name="sizeWithPrice"
+                        labelId="demo-multiple-checkbox-label"
+                        id="demo-multiple-checkbox"
+                        multiple
+                        className='customize'
+                        value={sizes}
+                        onChange={handleChangeSelectMultiple}
+                        input={<OutlinedInput label="Sizes" />}
+                        renderValue={(selected: string[]) => (
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {selected.map((value) => (
+                                    <Chip key={value} label={value} />
+                                ))}
+                            </Box>
+                        )}
+                        MenuProps={MenuProps}
                     >
-                        <MenuItem value={`10`}>Nike</MenuItem>
-                        <MenuItem value={`20`}>Air Jordan</MenuItem>
-                        <MenuItem value={`30`}>Yeezy</MenuItem>
+                        {sizeSelectedValue.map((name: string) => (
+                            <MenuItem key={name} value={name}>
+                                <Checkbox checked={sizes.indexOf(name) > -1} />
+                                <ListItemText primary={`size: ${name}`} />
+                            </MenuItem>
+                        ))}
                     </Select>
                 </FormControl>
-            </div>
-            <BaseTextareaAutosize className='border border-solid border-gray-200 text-[1.188rem] py-3 px-2 min-h-[200px] ' required aria-label="minimum height" placeholder="Enter Description" />
-            <FormControl fullWidth>
-                <InputLabel id="demo-multiple-checkbox-label">Sizes</InputLabel>
-                <Select
-                    labelId="demo-multiple-checkbox-label"
-                    id="demo-multiple-checkbox"
-                    multiple
-                    className='customize'
-                    value={sizes}
-                    onChange={handleChange}
-                    input={<OutlinedInput label="Sizes" />}
-                    renderValue={(selected: string[]) => (
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                            {selected.map((value) => (
-                                <Chip key={value} label={value} />
-                            ))}
-                        </Box>
-                    )}
-                    MenuProps={MenuProps}
-                >
-                    {sizeSelectedValue.map((name: string) => (
-                        <MenuItem key={name} value={name}>
-                            <Checkbox checked={sizes.indexOf(name) > -1} />
-                            <ListItemText primary={`size: ${name}`} />
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
 
-            <div className='flex flex-wrap w-full'>
-                {sizes.map((item: string) => {
-                    return <TextField key={item} className='w-[25%] pr-2 pb-2' required id="outlined-basic" label={`Price (Size ${item})`} variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        handleURLImage(e, item)
-                    }} />
-                })}
-            </div>
-            <Button variant="contained" className='w-fit flex items-center justify-center gap-1 normal-case' onClick={() => {
-                const currentImageList = [...imageList];
-                currentImageList.push({
-                    id: uuidv4(),
-                    url: ''
-                })
-                setImageList(currentImageList)
-            }}>Create Image <AddAPhotoOutlinedIcon /></Button>
-            {imageList.map((item: Image, index: number) => {
-                return <div className='flex items-center gap-4' key={item.id}>
-                    <TextField required id="outlined-basic" label="Image URL" variant="outlined" fullWidth onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        handleURLImage(e, item.id)
-                    }} />
-                    <DeleteOutlineOutlinedIcon className='cursor-pointer' onClick={() => {
-                        const currentImageList = imageList.filter((imageItem: Image) => {
-                            return imageItem.id !== item.id
-                        })
-                        setImageList(currentImageList)
-                    }} />
+                <div className='flex flex-wrap w-full'>
+                    {formValue.sizeWithPrice.map((item: SizeWithPrice, index: number) => {
+                        return <TextField type="number" key={item.size} className='w-[25%] pr-2 pb-2' name={item.size.toString()} value={formValue.sizeWithPrice[index].price} required id="outlined-basic" label={`Price (Size ${item.size})`} variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            const { value, name } = e.target;
+                            const response = formValue.sizeWithPrice.map((sizeItem: SizeWithPrice) => {
+                                if (sizeItem.size.toString() === name) {
+                                    return {
+                                        ...sizeItem,
+                                        price: Number(value)
+                                    }
+                                }
+                                return sizeItem
+                            })
+                            setFormValue({
+                                ...formValue,
+                                sizeWithPrice: response
+                            })
+                        }} />
+                    })}
                 </div>
-            })}
-        </div>)
+                <Button variant="contained" className='w-fit flex items-center justify-center gap-1 normal-case' onClick={() => {
+                    const currentImageList = [...formValue.imageList];
+                    currentImageList.push({
+                        id: uuidv4(),
+                        url: ''
+                    })
+                    setFormValue({
+                        ...formValue,
+                        imageList: currentImageList
+                    })
+                }}>Create Image <AddAPhotoOutlinedIcon /></Button>
+                {formValue.imageList.map((item: Image, index: number) => {
+                    return <div className='flex items-center gap-4' key={item.id}>
+                        <TextField required id="outlined-basic" label="Image URL" value={formValue.imageList[index].url} variant="outlined" fullWidth onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            const { value } = e.target
+                            setFormValue({
+                                ...formValue,
+                                imageList: formValue.imageList.map((imageItem: Image) => {
+                                    if (imageItem.id === item.id) {
+                                        return {
+                                            ...imageItem,
+                                            url: value
+                                        }
+                                    }
+                                    return imageItem
+                                })
+                            })
+                        }} />
+                        <DeleteOutlineOutlinedIcon className='cursor-pointer' onClick={() => {
+                            const currentImageList = formValue.imageList.filter((imageItem: Image) => {
+                                return imageItem.id !== item.id
+                            })
+                            setFormValue({
+                                ...formValue,
+                                imageList: currentImageList
+                            })
+                        }} />
+                    </div>
+                })}
+
+                <Button variant="contained" className='w-fit flex items-center justify-center gap-1 normal-case' type='submit'>Create Product</Button>
+            </form>
+        </div>
+    )
 }

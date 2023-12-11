@@ -8,6 +8,15 @@ export interface SizeWithPrice {
   price: number;
 }
 
+export interface FormValue {
+  productName: string,
+  releaseDate: string | null,
+  brand: string,
+  description: string,
+  sizeWithPrice: SizeWithPrice[],
+  imageList: Image[]
+}
+
 export const sizeSelectedValue = [
   "4",
   "4.5",
