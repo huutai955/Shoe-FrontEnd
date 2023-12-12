@@ -1,0 +1,22 @@
+@keyframes customAnimation {
+    0% {
+        height: 0%;
+    }
+
+    100% {
+        height: 100%;
+    }
+}
+
+
+.popup {
+    &:hover .showlist {
+        animation: customAnimation normal;
+        height: 170px;
+    }
+    .showlist {
+        height: 0px;
+        transition: 0.5s;
+        overflow-y: hidden;
+    }
+}

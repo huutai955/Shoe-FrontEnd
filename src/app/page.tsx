@@ -1,5 +1,5 @@
 'use client'
-import Image from 'next/image'
+import { LinearProgress } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -10,8 +10,6 @@ export default function Home() {
     router.push('/en')
   }, [])
   return (
-    <div>
-      hehe
-    </div>
+    <LinearProgress />
   )
 }

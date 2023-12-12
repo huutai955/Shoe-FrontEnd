@@ -19,6 +19,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
 import { useTranslation } from '@/app/i18n/client';
+import api from '@/api';
 
 
 const ITEM_HEIGHT = 48;
@@ -50,22 +51,10 @@ export default function ShoeForm({ params }: Props) {
         description: '',
         imageList: [],
         releaseDate: null,
-        sizeWithPrice: []
+        sizeWithPrice: [],
+        colorway: ''
     })
 
-    const handleURLImage = (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
-        const { value } = event.target;
-        const response = imageList.map((item) => {
-            if (item.id === id) {
-                return {
-                    ...item,
-                    url: value
-                }
-            }
-            return item
-        })
-        setImageList(response)
-    }
     const handleChangeSelectMultiple = (event: SelectChangeEvent<typeof sizes>) => {
         const {
             target: { value, name },
@@ -105,16 +94,17 @@ export default function ShoeForm({ params }: Props) {
         })
     }
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        console.log(formValue)
+        const response = await api.post('/shoe', formValue)
+        console.log(response)
     }
-    console.log(formValue)
     return (
-        <div className='bg-image w-full'>
-            <form className='max-w-[80rem] mx-auto flex flex-col h-screen custom-scroll gap-5 pr-10 bg-white py-10' onSubmit={handleSubmit}>
+        <div className='w-full'>
+            <form className='max-w-[80rem] mx-auto flex flex-col h-screen custom-scroll gap-5 px-10 bg-white py-10' onSubmit={handleSubmit}>
                 <h2 className='text-red-400 text-center'>{t("shoe.new.createNewShoe")}</h2>
                 <TextField required id="outlined-basic" name='productName' value={formValue.productName} label={t("shoe.new.form.productName")} variant="outlined" fullWidth onChange={handleChangeInput} />
+                <TextField required id="outlined-basic" name='colorway' value={formValue.colorway} label={t("shoe.new.form.colorway")} variant="outlined" fullWidth onChange={handleChangeInput} />
                 <div className='flex gap-2'>
                     <DatePicker
                         slotProps={{
@@ -236,7 +226,20 @@ export default function ShoeForm({ params }: Props) {
                     </div>
                 })}
 
-                <Button variant="contained" className='w-fit flex items-center justify-center gap-1 normal-case' type='submit'>{t("shoe.new.form.createProduct")}</Button>
+                <div className='flex gap-3'>
+                    <Button variant="contained" className='w-fit flex items-center justify-center gap-1 normal-case' type='submit'>{t("shoe.new.form.createProduct")}</Button>
+                    <Button variant="contained" className='w-fit flex items-center justify-center gap-1 normal-case' onClick={() => {
+                        setFormValue({
+                            productName: '',
+                            brand: 'Nike',
+                            description: '',
+                            imageList: [],
+                            releaseDate: null,
+                            sizeWithPrice: [],
+                            colorway: ''
+                        })
+                    }}>Reset</Button>
+                </div>
             </form>
         </div>
     )

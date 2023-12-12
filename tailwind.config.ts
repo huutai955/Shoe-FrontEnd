@@ -16,6 +16,19 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      keyframes: {
+        popup: {
+          '0%': {
+            height: '0%'
+          },
+          '100%': {
+            height: '100%'
+          }
+        }
+      },
+      animation: {
+        'show-popup': 'popup 2s',
+      }
     },
   },
   plugins: [],

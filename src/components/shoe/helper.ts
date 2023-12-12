@@ -14,7 +14,8 @@ export interface FormValue {
   brand: string,
   description: string,
   sizeWithPrice: SizeWithPrice[],
-  imageList: Image[]
+  imageList: Image[],
+  colorway: string
 }
 
 export const sizeSelectedValue = [
