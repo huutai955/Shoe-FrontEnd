@@ -1,3 +1,4 @@
+'use client'
 import { TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import FormControl from '@mui/material/FormControl';
@@ -17,6 +18,7 @@ import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
+import { useTranslation } from '@/app/i18n/client';
 
 
 const ITEM_HEIGHT = 48;
@@ -30,10 +32,15 @@ const MenuProps = {
     },
 };
 
-type Props = {}
+type Props = {
+    params: {
+        lng: string
+    }
+}
 
 
-export default function ShoeForm({ }: Props) {
+export default function ShoeForm({ params }: Props) {
+    const { t } = useTranslation(params.lng)
     const [imageList, setImageList] = useState<Image[]>([])
     const [sizes, setSizes] = React.useState<string[]>([]);
     const [sizeWithPriceList, setSizeWithPriceList] = useState<SizeWithPrice[]>([])
@@ -106,8 +113,8 @@ export default function ShoeForm({ }: Props) {
     return (
         <div className='bg-image w-full'>
             <form className='max-w-[80rem] mx-auto flex flex-col h-screen custom-scroll gap-5 pr-10 bg-white py-10' onSubmit={handleSubmit}>
-                <h2 className='text-red-400 text-center'>Create New Shoe</h2>
-                <TextField required id="outlined-basic" name='productName' value={formValue.productName} label="Name Product" variant="outlined" fullWidth onChange={handleChangeInput} />
+                <h2 className='text-red-400 text-center'>{t("shoe.new.createNewShoe")}</h2>
+                <TextField required id="outlined-basic" name='productName' value={formValue.productName} label={t("shoe.new.form.productName")} variant="outlined" fullWidth onChange={handleChangeInput} />
                 <div className='flex gap-2'>
                     <DatePicker
                         slotProps={{
@@ -115,7 +122,7 @@ export default function ShoeForm({ }: Props) {
                                 required: true,
                             },
                         }}
-                        label="Release Date"
+                        label={t("shoe.new.form.releaseDate")}
                         className='w-full'
                         value={formValue.releaseDate}
                         onChange={(newValue) => setFormValue({
@@ -124,12 +131,12 @@ export default function ShoeForm({ }: Props) {
                         })}
                     />
                     <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Brand</InputLabel>
+                        <InputLabel id="demo-simple-select-label">{t("shoe.new.form.brand")}</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={formValue.brand}
-                            label="Brand"
+                            label={t("shoe.new.form.brand")}
                             name="brand"
                             onChange={handleChangeSelect}
                         >
@@ -139,9 +146,9 @@ export default function ShoeForm({ }: Props) {
                         </Select>
                     </FormControl>
                 </div>
-                <BaseTextareaAutosize name='description' className='border border-solid border-gray-200 text-[1.188rem] py-3 px-2 min-h-[200px] ' required aria-label="minimum height" placeholder="Enter Description" onChange={handleChangeInput} />
+                <BaseTextareaAutosize name='description' className='border border-solid border-gray-200 text-[1.188rem] py-3 px-2 min-h-[200px] ' required aria-label="minimum height" placeholder={t("shoe.new.form.descriptopn")} onChange={handleChangeInput} />
                 <FormControl fullWidth>
-                    <InputLabel id="demo-multiple-checkbox-label">Sizes</InputLabel>
+                    <InputLabel id="demo-multiple-checkbox-label">{t("shoe.new.form.sizes")}</InputLabel>
                     <Select
                         name="sizeWithPrice"
                         labelId="demo-multiple-checkbox-label"
@@ -171,7 +178,7 @@ export default function ShoeForm({ }: Props) {
 
                 <div className='flex flex-wrap w-full'>
                     {formValue.sizeWithPrice.map((item: SizeWithPrice, index: number) => {
-                        return <TextField type="number" key={item.size} className='w-[25%] pr-2 pb-2' name={item.size.toString()} value={formValue.sizeWithPrice[index].price} required id="outlined-basic" label={`Price (Size ${item.size})`} variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        return <TextField type="number" key={item.size} className='w-[25%] pr-2 pb-2' name={item.size.toString()} value={formValue.sizeWithPrice[index].price} required id="outlined-basic" label={`${t("shoe.new.form.price")} (Size ${item.size})`} variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             const { value, name } = e.target;
                             const response = formValue.sizeWithPrice.map((sizeItem: SizeWithPrice) => {
                                 if (sizeItem.size.toString() === name) {
@@ -199,10 +206,10 @@ export default function ShoeForm({ }: Props) {
                         ...formValue,
                         imageList: currentImageList
                     })
-                }}>Create Image <AddAPhotoOutlinedIcon /></Button>
+                }}>{t("shoe.new.form.createImage")}<AddAPhotoOutlinedIcon /></Button>
                 {formValue.imageList.map((item: Image, index: number) => {
                     return <div className='flex items-center gap-4' key={item.id}>
-                        <TextField required id="outlined-basic" label="Image URL" value={formValue.imageList[index].url} variant="outlined" fullWidth onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        <TextField required id="outlined-basic" label={t("shoe.new.form.imageURL")} value={formValue.imageList[index].url} variant="outlined" fullWidth onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             const { value } = e.target
                             setFormValue({
                                 ...formValue,
@@ -229,7 +236,7 @@ export default function ShoeForm({ }: Props) {
                     </div>
                 })}
 
-                <Button variant="contained" className='w-fit flex items-center justify-center gap-1 normal-case' type='submit'>Create Product</Button>
+                <Button variant="contained" className='w-fit flex items-center justify-center gap-1 normal-case' type='submit'>{t("shoe.new.form.createProduct")}</Button>
             </form>
         </div>
     )

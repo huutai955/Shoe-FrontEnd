@@ -5,11 +5,11 @@ const nextConfig = {
     sassOptions: {
         includePaths: [path.join(__dirname, 'styles')],
     },
-    i18n: {
-        locales: ['en-US', 'fr', 'vi-VN'],
-        defaultLocale: 'fr',
-        localeDetection: false,
-    }
+    // i18n: {
+    //     locales: ['en-US', 'fr', 'vi-VN'],
+    //     defaultLocale: 'fr',
+    //     localeDetection: false,
+    // }
 }
 
 

@@ -1,4 +1,13 @@
 {
-    "title": "Xin chào!",
-    "to-second-page": "Tới trang thứ 2"
+  "shoe.new.createNewShoe": "Tạo sản phẩm mới",
+  "shoe.new.form.productName": "Tên sản phẩm",
+  "shoe.new.form.releaseDate": "Ngày Phát Hành",
+  "shoe.new.form.brand": "Thương Hiệu",
+  "shoe.new.form.descriptopn": "Nhập Thông Tin Giới Thiệu",
+  "shoe.new.form.sizes": "Sizes",
+  "shoe.new.form.createImage": "Tạo hình ảnh",
+  "shoe.new.form.createProduct": "Tạo sản phẩm",
+  "shoe.new.form.price": "Giá",
+  "shoe.new.form.imageURL": "URL Hình Ảnh"
+
 }

@@ -14,7 +14,6 @@ export default function RootLayout({ children, params: {
 }) {
     return (
         <html lang={lng} dir={dir(lng)}>
-            <head />
             <body>
                 {children}
             </body>

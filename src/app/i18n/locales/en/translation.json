@@ -1,5 +1,13 @@
-
 {
-  "title": "Hi there!",
-  "to-second-page": "To second page"
+  "shoe.new.createNewShoe": "Create New Shoe",
+  "shoe.new.form.productName": "Product Name",
+  "shoe.new.form.releaseDate": "Release Date",
+  "shoe.new.form.brand": "Brand",
+  "shoe.new.form.descriptopn": "Enter Descriptopn",
+  "shoe.new.form.sizes": "Sizes",
+  "shoe.new.form.createImage": "Create Image",
+  "shoe.new.form.createProduct": "Create Product",
+  "shoe.new.form.price": "Price",
+  "shoe.new.form.imageURL": "Image URL"
+
 }
