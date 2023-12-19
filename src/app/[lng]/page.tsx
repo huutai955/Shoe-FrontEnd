@@ -1,7 +1,4 @@
-'use client'
-import React, { useState } from 'react'
-import { TextField } from '@mui/material'
-import Link from 'next/link'
+import React from 'react'
 import './index.scss'
 type Props = {
   params: {
@@ -9,9 +6,7 @@ type Props = {
   }
 }
 
-const { NEXT_PUBLIC_FACEBOOK_CLIENT_ID, NEXT_PUBLIC_FACEBOOK_SECRET_ID, NEXT_PUBLIC_FACEBOOK_REDIRECT_URL } = process.env
 export default function Page({ params: { lng } }: Props) {
-  console.log(process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID)
   return (
     <>
       <div className='relative'>
