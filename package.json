@@ -15,6 +15,7 @@
     "@mui/icons-material": "^5.14.19",
     "@mui/material": "^5.14.20",
     "@mui/x-date-pickers": "^6.18.3",
+    "@reduxjs/toolkit": "^2.0.1",
     "@types/uuid": "^9.0.7",
     "accept-language": "^3.0.18",
     "axios": "^1.6.2",
@@ -28,6 +29,8 @@
     "react-cookie": "^6.1.1",
     "react-dom": "^18",
     "react-i18next": "^13.5.0",
+    "react-query": "^3.39.3",
+    "react-redux": "^9.0.4",
     "sass": "^1.69.5",
     "uuid": "^9.0.1"
   },

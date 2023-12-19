@@ -10,10 +10,15 @@
 
 
 .popup {
+    box-shadow: -4px 12px 5px -4px rgba(0, 0, 0, 0.47);
+    -webkit-box-shadow: -4px 12px 5px -4px rgba(0, 0, 0, 0.47);
+    -moz-box-shadow: -4px 12px 5px -4px rgba(0, 0, 0, 0.47);
+
     &:hover .showlist {
         animation: customAnimation normal;
         height: 170px;
     }
+
     .showlist {
         height: 0px;
         transition: 0.5s;
