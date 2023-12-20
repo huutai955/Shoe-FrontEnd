@@ -4,7 +4,7 @@ import { authServices } from '@/api/services/auth'
 import LoginForm from '@/components/login/LoginForm'
 import { setUserAuth } from '@/redux/reducers/auth'
 import { AppDispatch } from '@/redux/store'
-import { ACCESS_TOKEN } from '@/utils/constant'
+import { ACCESS_TOKEN, FACEBOOK_ACCESS_TOKEN } from '@/utils/constant'
 import { Skeleton } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
@@ -33,7 +33,7 @@ export default function Page({ params: { lng } }: Props) {
         onSuccess: (data) => {
             dispatch(setUserAuth(data.data))
             router.push(`/${lng}`)
-            localStorage.setItem(ACCESS_TOKEN, data.data[ACCESS_TOKEN])
+            localStorage.setItem(FACEBOOK_ACCESS_TOKEN, data.data[ACCESS_TOKEN])
         },
         staleTime: 12 * 60 * 1000,
     })

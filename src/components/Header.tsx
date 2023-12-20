@@ -1,17 +1,43 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { TextField } from '@mui/material'
 import Link from 'next/link'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { RootState } from '@/redux/store'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '@/redux/store'
+import { setUserAuth } from '@/redux/reducers/auth'
+import { ACCESS_TOKEN, FACEBOOK_ACCESS_TOKEN } from '@/utils/constant'
+import { useMutation } from 'react-query'
+import { authServices } from '@/api/services/auth'
 type Props = {
     lng: string
 }
-
+const { getFacebookInfoAccount } = authServices
 export default function Header({ lng }: Props) {
     const [isLogin, setIsLogin] = useState<boolean>(false)
     const { user } = useSelector((state: RootState) => state.auth)
+    const dispatch: AppDispatch = useDispatch()
+    const handleLoutoutAccount = () => {
+        dispatch(setUserAuth(null))
+        localStorage.removeItem(FACEBOOK_ACCESS_TOKEN)
+    }
+
+    const getFacebookInfoAccountMutation = useMutation({
+        mutationKey: ['Facebook/Account'],
+        mutationFn: () => {
+            return getFacebookInfoAccount()
+        },
+        onSuccess: (data) => {
+            dispatch(setUserAuth(data.data))
+        }
+    })
+
+    useEffect(() => {
+        const facebookToken = localStorage.getItem(FACEBOOK_ACCESS_TOKEN);
+        if (facebookToken) {
+            getFacebookInfoAccountMutation.mutate()
+        }
+    }, [])
     return (
         <div className='flex items-center justify-between py-4 pl-2'>
             <TextField size='small' id="outlined-search" label="Search field" type="search" />
@@ -25,7 +51,9 @@ export default function Header({ lng }: Props) {
                         <li className='py-2 px-4'>My Account</li>
                         <li className='py-2 px-4'>My Orders</li>
                         <li className='py-2 px-4'>Support</li>
-                        <li className='py-2 px-4'>Sign Out</li>
+                        <li className='py-2 px-4' onClick={() => {
+                            handleLoutoutAccount()
+                        }}>Sign Out</li>
                     </ul>
                 </li> : <li className='cursor-pointer pr-2'>
                     <Link href={`/${lng}/login`} className='no-underline text-black'>Sign In</Link>

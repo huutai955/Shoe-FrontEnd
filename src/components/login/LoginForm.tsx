@@ -46,7 +46,7 @@ export default function LoginForm({ lng }: Props) {
                 <div className='border-b border-solid border-t-0 border-r-0 border-l-0 border-b-gray-950 grow'></div>
             </div>
             <Button variant='outlined' className='border border-solid border-black text-black text-base mt-5 py-3 '>Create An Account</Button>
-            <Link href={`https://www.facebook.com/v18.0/dialog/oauth?client_id=${process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FACEBOOK_REDIRECT_URL}${lng}/login`}>Login With Facebook</Link>
+            <Link href={`https://www.facebook.com/v18.0/dialog/oauth?client_id=${process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FACEBOOK_REDIRECT_URL}${lng}/login&scope=email,public_profile`}>Login With Facebook</Link>
         </form>
     )
 }
